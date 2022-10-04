@@ -13,7 +13,7 @@ export class AccessList {
     }
 
     async getAllToDo(userId: string): Promise<TodoItem[]> {
-        const params = {
+        const par = {
             TableName: this.TodoListTable,
             KeyConditionExpression: "#userId = :userId",
             ExpressionAttributeNames: {
@@ -24,7 +24,7 @@ export class AccessList {
             }
         };
 
-        let result = await this.docClient.query(params).promise();
+        let result = await this.docClient.query(par).promise();
         console.log(result);
         let items = result.Items;
         return items as TodoItem[];
