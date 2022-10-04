@@ -119,8 +119,8 @@ functions:
           cors: true
           authorizer: Auth
           documentation:
-            summary: "Create a new todo item"
-            description: "Create a new todo item"
+            summary: "Creating new to-do item"
+            description: "Creating  new to - do item"
             requestModels:
               "application/json": CreateTodoRequest
           reqValidatorName: RequestBodyValidator
@@ -210,7 +210,7 @@ functions:
 resources:
   Resources:
     # TODO: Add any necessary AWS resources
-    TodosTable:
+    TodoListTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
