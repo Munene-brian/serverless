@@ -14,7 +14,7 @@ export async function getAllToDo(jwtToken: any): Promise<TodoItem[]> {
 
 export function createToDo(todoRequest: CreateTodoRequest, jwtToken: any): Promise<TodoItem> {
     const userId = parseUserId(jwtToken);
-    const todoId =  uuid(); 	//Create a version 4 random) UUID
+    const todoId =  uuid(); 	//Create a version 4 random (UUID) unique Id
     const s3BucketName = process.env.S3_BUCKET_NAME;
     
     return toDoAccess.createToDo({
@@ -35,7 +35,7 @@ export function deleteToDo(todoId: string, jwtToken: string): Promise<string> {
     return toDoAccess.deletebyId(todoId, userId);
 }
 
-//generating upload url image
+//generating upload url image function
 export function imageurlupload(todoId: string): Promise<string> {
     return toDoAccess.imageurlupload(todoId);
 }
