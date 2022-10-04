@@ -65,11 +65,11 @@ export class AccessList {
             ReturnValues: "ALL_DATA"
         };
 
-        const result = await this.docClient.update(params).promise();
+        let result = await this.docClient.update(params).promise();
         console.log(result);
-        const attributes = result.Attributes;
+        const att = result.Attributes;
 
-        return attributes as TodoUpdate;
+        return att as TodoUpdate;
     }  
     async deletebyId(todoId: string, userId: string): Promise<string> {
         console.log("Deleting to do Item");
@@ -80,7 +80,6 @@ export class AccessList {
                 "todoId": todoId
             },
         };
-
         const result = await this.docClient.delete(params).promise();
         console.log(result);
         return " " as string;
