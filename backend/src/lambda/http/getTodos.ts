@@ -8,9 +8,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     console.log("Processing Event ", event);
     const authorization = event.headers.Authorization;
     const split = authorization.split(' ');
-    const jwtToken = split[1];
-
-    const toDos = await getAllToDo(jwtToken);
+    const jsntkn = split[1];
+    const toDos = await getAllToDo({ jsntkn });
 
     return {
         statusCode: 200,
@@ -18,7 +17,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
-            "items": toDos,
+            toDos,
         }),
     }
 };

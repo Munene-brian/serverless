@@ -8,11 +8,11 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     console.log("Processing Event ", event);
     const authorization = event.headers.Authorization;
     const split = authorization.split(' ');
-    const jwtToken = split[1];
+    const jsntkn = split[1];
 
-    const todoId = event.pathParameters.todoId;
+    const todolistId = event.pathParameters.todoId;
 
-    const deleteData = await deleteToDo(todoId, jwtToken);
+    const deleteData = await deleteToDo({ todolistId, jsntkn });
 
     return {
         statusCode: 200,

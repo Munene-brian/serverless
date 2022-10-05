@@ -9,40 +9,34 @@ export class AccessList {
         private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
         private readonly s3Client: Types = new AWS.S3({ signatureVersion: 'v4' }),
         private readonly TodoListTable = process.env.TODOS_TABLE,
-        private readonly s3BucketName = process.env.S3_BUCKET_NAME) {
+        private readonly userIdIndex = process.env.USER_ID_INDEX,
+        private readonly bucketname = process.env.S3_BUCKET_NAME) {
     }
 
-    async getAllToDo(userId: string): Promise<TodoItem[]> {
-        const par = {
+    async getAllToDo(userId:string): Promise<TodoItem[]>{
+        const result = await this.docClient.query({
             TableName: this.TodoListTable,
-            KeyConditionExpression: "#userId = :userId",
-            ExpressionAttributeNames: {
-                "#userId": "userId"
-            },
+            IndexName: this.userIdIndex,
+            KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
-                ":userId": userId
+                ':userId': userId
             }
-        };
-
-        let result = await this.docClient.query(par).promise();
-        console.log(result);
-        let items = result.Items;
-        return items as TodoItem[];
+        }).promise()
+        return result.Items as TodoItem[]
     }
 
-    async createToDo(todoItem: TodoItem): Promise<TodoItem> {
-        console.log("Creating to do list");
-        const params = {
+     
+    async createToDO(todoItem:TodoItem): Promise<TodoItem>{
+        const result = await this.docClient.put({
             TableName: this.TodoListTable,
             Item: todoItem,
-        };
+        }
 
-        const result = await this.docClient.put(params).promise();
-        console.log(result);
-
-        return todoItem as TodoItem;
+        ).promise()
+        console.log(result)
+        return todoItem as TodoItem
     }
-
+  
     async updateToDo(todoUpdate: TodoUpdate, todoId: string, userId: string): Promise<TodoUpdate> {
    
         const params = {
@@ -85,10 +79,9 @@ export class AccessList {
         return " " as string;
     }
 
-    async imageurlupload(todoId: string): Promise<string> {
-        console.log("Generating image url ...");
+    async imageurlupload(todoId: any): Promise<string> {
         const url = this.s3Client.getSignedUrl('putObject', {
-            Bucket: this.s3BucketName,
+            Bucket: this.bucketname,
             Key: todoId,
             Expires: 2500,
         });

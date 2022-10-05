@@ -9,18 +9,19 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     console.log("Processing Event ", event);
     const authorization = event.headers.Authorization;
     const split = authorization.split(' ');
-    const jwtToken = split[1];
+    const jwtoken = split[1];
 
-    const newTodo: CreateTodoRequest = JSON.parse(event.body);
-    const toDoItem = await createToDo(newTodo, jwtToken);
+    const resquestBody: CreateTodoRequest = JSON.parse(event.body);
+    const item = await createToDo(resquestBody, jwtoken);
 
     return {
         statusCode: 201,
         headers: {
             "Access-Control-Allow-Origin": "*",
+            'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-            "item": toDoItem
+            item
         }),
     }
 };
