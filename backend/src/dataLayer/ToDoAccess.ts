@@ -4,9 +4,12 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { TodoUpdate } from "../models/TodoUpdate";
 import { TodoItem } from "../models/TodoItem";
 
+const AWSXRay = require('aws-xray-sdk')
+const XAWS = AWSXRay.captureAWS(AWS)
+
 export class AccessList {
     constructor(
-        private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
+        private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
         private readonly s3Client: Types = new AWS.S3({ signatureVersion: 'v4' }),
         private readonly TodoListTable = process.env.TODOS_TABLE,
         private readonly userIdIndex = process.env.USER_ID_INDEX,
