@@ -4,20 +4,28 @@ import {CreateTodoRequest} from "../requests/CreateTodoRequest";
 import {UpdateTodoRequest} from "../requests/UpdateTodoRequest";
 import {TodoUpdate} from "../models/TodoUpdate";
 import {AccessList} from "../dataLayer/ToDoAccess";
-const uuid = require('uuid/v4');
+const uuid = require('uuid');
+const uuidv4=uuid.v4
 import * as uuid from 'uuid';
 
 const toDoAccess = new AccessList();
 
 export async function getAllToDo({ jsntkn }: { jsntkn : any; }): Promise<TodoItem[]> {
-    const userId = parseUserId(jsntkn );
-    return toDoAccess.getAllToDo(userId); 
+    try{
+        const userId = parseUserId(jsntkn );
+        return toDoAccess.getAllToDo(userId); 
+    }
+   catch(error){
+    error
+   };
+   
+    
 }
 
 
 export function createToDo(todoRequest: CreateTodoRequest, jsntkn : any): Promise<TodoItem> {
     const userId = parseUserId(jsntkn );
-    const todolistId =  uuid(); 	//Create a version 4 random (UUID) unique Id
+    const todolistId =  uuidv4(); 	//Create a version 4 random (UUID) unique Id
     const bucketName = process.env.S3_BUCKET_NAME;
     
     return toDoAccess.createToDO({

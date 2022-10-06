@@ -1,11 +1,12 @@
 import 'source-map-support/register'
 
-import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult} from 'aws-lambda'
+import {APIGatewayProxyEvent, APIGatewayProxyHandler, 
+    APIGatewayProxyResult} from 'aws-lambda'
 import {CreateTodoRequest} from '../../requests/CreateTodoRequest';
 import {createToDo} from "../../Logic/ToDo";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // TODO: Implement creating a new TODO item
+    try{
     console.log("Processing Event ", event);
     const authorization = event.headers.Authorization;
     const split = authorization.split(' ');
@@ -24,4 +25,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             item
         }),
     }
+    }
+        catch (error){
+            error
+        }
 };
